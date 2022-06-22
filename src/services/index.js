@@ -114,6 +114,26 @@ class TagService {
         }
     }
 
+    /** */
+    async GetTagsByAuthor(authorID) {
+        const objID = await this.utils.validID(authorID)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${authorID}`
+        })
+
+        try {
+            const tags = await this.repository.FindTagsByAuthor(authorID)
+            return({
+                status: 200,
+                tags
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetTagsByAuthor: ${err}`)
+            throw err
+        }
+    }
+
 }
 
 module.exports = TagService

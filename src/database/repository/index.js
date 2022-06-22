@@ -42,6 +42,19 @@ class TagRepository {
             throw err
         }
     }
+
+    /** */
+    async FindTagsByAuthor(author) {
+        try {
+            const tags = await Tag.find({
+                author
+            })
+            return tags
+        } catch(err) {
+            console.log(`Error in TagRepository: FindTagsByAuthor: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = TagRepository

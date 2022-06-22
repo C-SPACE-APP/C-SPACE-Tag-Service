@@ -36,6 +36,19 @@ const TagAPI = (app) => {
     })
 
     /** */
+    app.get('/author/:id', Authorize(), async (req, res) => {
+        const { id } = req.params
+
+        try {
+            const { status, message, tags } = await service.GetTagsByAuthor(id)
+            return res.status(status).json({ message, tags })
+        } catch(err) {
+            console.log(`Error in GET tags by author: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
+    /** */
     app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
 
