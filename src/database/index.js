@@ -1,4 +1,5 @@
 module.exports = {
     databaseConnection: require('./connect'),
-    TagRepository: require('./repository')
+    TagRepository: require('./repository'),
+    DBUtils: require('./utils'),
 }
