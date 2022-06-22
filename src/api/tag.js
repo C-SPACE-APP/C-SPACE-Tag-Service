@@ -22,6 +22,19 @@ const TagAPI = (app) => {
         }
     })
 
+    /** */
+    app.get('/:id', Authorize(), async (req, res) => {
+        const { id } = req.params
+
+        try {
+            const { status, message, tag } = await service.GetTag(id)
+            return res.status(status).json({ message, tag })
+        } catch(err) {
+            console.log(`Error in GET one tag: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
 }
 
 module.exports = TagAPI

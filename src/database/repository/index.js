@@ -13,6 +13,17 @@ class TagRepository {
             throw err
         }
     }
+
+    /** */
+    async FindTag(id) {
+        try {
+            const tag = await Tag.findOne({ _id:id })
+            return tag
+        } catch(err) {
+            console.log(`Error in TagRepository: FindTag: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = TagRepository

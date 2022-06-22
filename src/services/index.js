@@ -44,6 +44,31 @@ class TagService {
         }
     }
 
+    /** */
+    async GetTag(id) {
+        const objID = await this.utils.validID(id)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${id}`
+        })
+
+        try {
+            const tag = await this.repository.FindTag(id)
+
+            if(!tag) return({
+                status: 400,
+                message: `Tag ${id} not found`
+            })
+
+            return({
+                status: 200,
+                tag
+            })
+        } catch(err) {
+            throw `Error searching for Tag. Error: ${err}`
+        }
+    }
+
 }
 
 module.exports = TagService
