@@ -69,6 +69,25 @@ class TagService {
         }
     }
 
+    /** */
+    async GetTags(filter) {
+        let { filter:pattern } = await this.utils.sanitize({ filter })
+
+        if(!pattern) pattern = ".*"
+
+        try {
+            const tags = await this.repository.FindTags(pattern)
+
+            return({
+                status: 200,
+                tags
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetTags: ${err}`)
+            throw err
+        }
+    }
+
 }
 
 module.exports = TagService

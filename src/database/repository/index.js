@@ -24,6 +24,19 @@ class TagRepository {
             throw err
         }
     }
+
+    /** */
+    async FindTags(pattern) {
+        try {
+            const tags = await Tag.find({
+                tagName: {$regex: new RegExp(pattern), $options: 'i'}
+            })
+            return tags
+        } catch(err) {
+            console.log(`Error in TagRepository: FindTags: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = TagRepository
