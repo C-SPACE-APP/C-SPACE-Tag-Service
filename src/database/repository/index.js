@@ -22,7 +22,7 @@ class TagRepository {
                     { _id: id },
                     { tagName }
                 ]
-            })
+            }).lean()
             return tag
         } catch(err) {
             console.log(`Error in TagRepository: FindTag: ${err}`)
@@ -35,7 +35,7 @@ class TagRepository {
         try {
             const tags = await Tag.find({
                 tagName: {$regex: new RegExp(pattern), $options: 'i'}
-            })
+            }).lean()
             return tags
         } catch(err) {
             console.log(`Error in TagRepository: FindTags: ${err}`)

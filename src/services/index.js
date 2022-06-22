@@ -1,5 +1,6 @@
 const { TagRepository, DBUtils } = require('../database')
 const mongoose = require('mongoose')
+const axios = require('axios')
 
 class TagService {
 
@@ -65,12 +66,25 @@ class TagService {
         })
 
         try {
-            const tag = await this.repository.FindTag({ id })
+            let tag = await this.repository.FindTag({ id })
 
             if(!tag) return({
                 status: 400,
                 message: `Tag ${id} not found`
             })
+
+            const { data } = await axios({
+                method: 'post',
+                url: 'http://localhost:3002/app-events/',
+                data: {
+                    event: 'GET_USER',
+                    data: {
+                        userId: tag.author
+                    }
+                }
+            })
+
+            if(data.user) tag.author = data.user
 
             return({
                 status: 200,
