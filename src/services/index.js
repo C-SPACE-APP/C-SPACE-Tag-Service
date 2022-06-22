@@ -28,7 +28,7 @@ class TagService {
             if(existing) return({
                 status: 200,
                 message: `Tag ${tagName} already exist`,
-                tag: existing
+                payload: { tag: existing }
             })
         } catch(err) {
             console.log(`Error in TagRepository: AddTag: ${err}`)
@@ -49,7 +49,7 @@ class TagService {
 
             return({
                 status: 200,
-                tag
+                payload: { tag }
             })
         } catch(err) {
             console.log(`Error in TagService: AddTag: ${err}`)
@@ -88,7 +88,7 @@ class TagService {
 
             return({
                 status: 200,
-                tag
+                payload: { tag }
             })
         } catch(err) {
             throw `Error searching for Tag. Error: ${err}`
@@ -106,7 +106,7 @@ class TagService {
 
             return({
                 status: 200,
-                tags
+                payload: { tags }
             })
         } catch(err) {
             console.log(`Error in TagService: GetTags: ${err}`)
@@ -126,11 +126,27 @@ class TagService {
             const tags = await this.repository.FindTagsByAuthor(authorID)
             return({
                 status: 200,
-                tags
+                payload: { tags }
             })
         } catch(err) {
             console.log(`Error in TagService: GetTagsByAuthor: ${err}`)
             throw err
+        }
+    }
+
+    /** */
+    async SubscribeEvents(payload) {
+        const { event, data } = payload
+        const { id } = data
+
+        switch(event) {
+            case 'GET_TAG':
+                return this.GetTag(id)
+            default:
+                return({
+                    status: 400,
+                    message: `No event ${event} available`
+                })
         }
     }
 

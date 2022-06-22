@@ -14,8 +14,8 @@ const TagAPI = (app) => {
         const { tagName, description } = req.body
 
         try {
-            const {status, message, tag } = await service.AddTag({tagName, description, author})
-            return res.status(status).json({ message, tag })
+            const {status, message, payload } = await service.AddTag({tagName, description, author})
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in POST tag: ${err}`)
             return res.status(500).json({ err })
@@ -27,8 +27,8 @@ const TagAPI = (app) => {
         const { search } = req.query
 
         try {
-            const { status, message, tags } = await service.GetTags(search)
-            return res.status(status).json({ message, tags })
+            const { status, message, payload } = await service.GetTags(search)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET many tags: ${err}`);
             return res.status(500).json({ err })
@@ -40,8 +40,8 @@ const TagAPI = (app) => {
         const { id } = req.params
 
         try {
-            const { status, message, tags } = await service.GetTagsByAuthor(id)
-            return res.status(status).json({ message, tags })
+            const { status, message, payload } = await service.GetTagsByAuthor(id)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET tags by author: ${err}`);
             return res.status(500).json({ err })
@@ -53,8 +53,8 @@ const TagAPI = (app) => {
         const { id } = req.params
 
         try {
-            const { status, message, tag } = await service.GetTag(id)
-            return res.status(status).json({ message, tag })
+            const { status, message, payload } = await service.GetTag(id)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET one tag: ${err}`);
             return res.status(500).json({ err })
