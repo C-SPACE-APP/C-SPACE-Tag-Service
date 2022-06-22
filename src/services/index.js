@@ -84,7 +84,9 @@ class TagService {
                 }
             })
 
-            if(data.user) tag.author = data.user
+            console.log(data)
+
+            if(data.payload.user) tag.author = data.payload.user
 
             return({
                 status: 200,
