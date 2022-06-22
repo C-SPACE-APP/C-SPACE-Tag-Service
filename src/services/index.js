@@ -23,6 +23,18 @@ class TagService {
         })
 
         try {
+            const existing = await this.repository.FindTag({ tagName })
+            if(existing) return({
+                status: 200,
+                message: `Tag ${tagName} already exist`,
+                tag: existing
+            })
+        } catch(err) {
+            console.log(`Error in TagRepository: AddTag: ${err}`)
+            throw err
+        }
+
+        try {
             const tag = await this.repository.CreateTag({
                 tagName,
                 description,
@@ -53,7 +65,7 @@ class TagService {
         })
 
         try {
-            const tag = await this.repository.FindTag(id)
+            const tag = await this.repository.FindTag({ id })
 
             if(!tag) return({
                 status: 400,

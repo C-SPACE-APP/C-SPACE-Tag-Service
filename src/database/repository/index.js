@@ -15,9 +15,14 @@ class TagRepository {
     }
 
     /** */
-    async FindTag(id) {
+    async FindTag({id, tagName}) {
         try {
-            const tag = await Tag.findOne({ _id:id })
+            const tag = await Tag.findOne({
+                $or: [
+                    { _id: id },
+                    { tagName }
+                ]
+            })
             return tag
         } catch(err) {
             console.log(`Error in TagRepository: FindTag: ${err}`)
