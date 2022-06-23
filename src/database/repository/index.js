@@ -69,6 +69,20 @@ class TagRepository {
             throw err
         }
     }
+
+    /** */
+    async FindTagsOfArray(ids) {
+        try {
+            const tags = await Tag.find()
+            .where('_id')
+            .in(ids)
+
+            return tags
+        } catch(err) {
+            console.log(`Error in TagRepository: FindTagsOfArray: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = TagRepository

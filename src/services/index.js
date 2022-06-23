@@ -84,8 +84,6 @@ class TagService {
                 }
             })
 
-            console.log(data)
-
             if(data.payload.user) tag.author = data.payload.user
 
             return({
@@ -139,6 +137,28 @@ class TagService {
         }
     }
 
+     /** */
+     async GetTagsOfArray(ids) {
+        for( const id of ids) {
+            const objID = await this.utils.validID(id)
+            if(!objID) return({
+                status: 400,
+                message: `Invalid ID: ${id}`
+            })
+        }
+        
+        try {
+            const tags = await this.repository.FindTagsOfArray(ids)
+            return({
+                status: 200,
+                payload: { tags }
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetTagsOfArray: ${err}`)
+            throw err
+        }
+    }
+
     /** */
     async SubscribeEvents(payload) {
         const { event, data } = payload
@@ -147,6 +167,8 @@ class TagService {
         switch(event) {
             case 'GET_TAG':
                 return this.GetTag(id)
+            case 'GET_TAGS_OF_ARRAY':
+                return this.GetTagsOfArray(id)
             default:
                 return({
                     status: 400,
