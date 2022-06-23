@@ -60,4 +60,5 @@ Used to create a new tag
   Request body must contain these two properties:  
     - `event`: **String** that will specify which tag service to access. Possible values are:
       - GET_TAG
+      - GET_TAGS_OF_ARRAY
     - `data`: **JSON object** containing required properties.
