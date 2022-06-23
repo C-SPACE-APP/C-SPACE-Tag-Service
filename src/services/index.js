@@ -98,17 +98,20 @@ class TagService {
     }
 
     /** */
-    async GetTags(filter) {
-        let { filter:pattern } = await this.utils.sanitize({ filter })
+    async GetTags({ search, limit, page }) {
+        let { search:pattern } = await this.utils.sanitize({ search })
 
         if(!pattern) pattern = ".*"
 
         try {
-            const tags = await this.repository.FindTags(pattern)
-
+            const { tags, resultCount, lastPage } = await this.repository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
             return({
                 status: 200,
-                payload: { tags }
+                payload: { 
+                    tags,
+                    resultCount,
+                    lastPage
+                }
             })
         } catch(err) {
             console.log(`Error in TagService: GetTags: ${err}`)

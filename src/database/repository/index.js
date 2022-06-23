@@ -31,12 +31,26 @@ class TagRepository {
     }
 
     /** */
-    async FindTags(pattern) {
+    async FindTags({ pattern, count, page }) {
+        const limit = count || 10
+        const skip = page ? (page-1)*limit : 0
+
         try {
             const tags = await Tag.find({
                 tagName: {$regex: new RegExp(pattern), $options: 'i'}
-            }).lean()
-            return tags
+            })
+            .sort({ tagName: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean()
+            
+            const resultCount = await Tag.countDocuments({
+                tagName: {$regex: new RegExp(pattern), $options: 'i'}
+            })
+
+            const lastPage = Math.floor(resultCount/limit) || 1
+
+            return { tags, resultCount, lastPage }
         } catch(err) {
             console.log(`Error in TagRepository: FindTags: ${err}`)
             throw err

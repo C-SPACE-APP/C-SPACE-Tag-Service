@@ -24,10 +24,10 @@ const TagAPI = (app) => {
 
     /** */
     app.get('/', Authorize(), async (req, res) => {
-        const { search } = req.query
+        const { search, limit, page } = req.query
 
         try {
-            const { status, message, payload } = await service.GetTags(search)
+            const { status, message, payload } = await service.GetTags({ search, limit, page })
             return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET many tags: ${err}`);
