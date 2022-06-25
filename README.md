@@ -25,8 +25,12 @@ Used to fetch data of multiple users.
 
  + **Requirement/s**  
    - User is logged in
+
+ + **Option/s** (request body)  
+   - if a property `id` is present in the reqest body, the endpoint will search for **tagNames** matching the elements of the list
+   - else, it will search using query parameters 
    
- + **Optiona/s** (Query parameter/s)  
+ + **Option/s** (Query parameter/s)  
    - `search`: **String** that will be used to match the **tagName** of tags. If none is provided, user documents will be fetched in ascending order of tagName.
    - `limit`: **Number** that will indicate the number of tag documents to be returned.
    - `page`: **Number** that will help determine the number of documents to skip when searching for tags.
