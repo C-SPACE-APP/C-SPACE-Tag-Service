@@ -193,6 +193,8 @@ class TagService {
                 return this.GetTag(id)
             case 'GET_TAGS_OF_ARRAY':
                 return this.GetTagsOfArray(id)
+            case 'GET_TAGS_OF_ARRAY_TAGNAMES':
+                return this.GetTagsOfArrayTagName(id)
             default:
                 return({
                     status: 400,
