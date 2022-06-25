@@ -160,6 +160,30 @@ class TagService {
     }
 
     /** */
+    async GetTagsOfArrayTagName(tagNames) {
+        if(tagNames.length <= 0) return({
+            status: 400,
+            message: `No tagNames provided`
+        })
+
+        try {
+            const tags = await this.repository.FindTagsOfArrayTagName(tagNames)
+            const resultLen = tags.length
+            const inputLen = tagNames.length
+            const message = (resultLen === inputLen ? null : `${resultLen} out of ${inputLen} tags found`)
+
+            return({
+                status: 200,
+                message,
+                payload: { tags }
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetTagsOfArrayTagName: ${err}`)
+            throw err
+        }
+    }
+
+    /** */
     async SubscribeEvents(payload) {
         const { event, data } = payload
         const { id } = data

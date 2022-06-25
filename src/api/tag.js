@@ -23,12 +23,20 @@ const TagAPI = (app) => {
     })
 
     /** */
-    app.get('/', Authorize(), async (req, res) => {
+    // app.get('/', Authorize(), async (req, res) => {
+    app.get('/', async (req, res) => {
         const { search, limit, page } = req.query
+        const { id } = req.body
 
         try {
-            const { status, message, payload } = await service.GetTags({ search, limit, page })
-            return res.status(status).json({ message, payload })
+            if(id) {
+                const { status, message, payload } = await service.GetTagsOfArrayTagName(id)
+                return res.status(status).json({ message, payload })
+            }
+            else {
+                const { status, message, payload } = await service.GetTags({ search, limit, page })
+                return res.status(status).json({ message, payload })
+            }
         } catch(err) {
             console.log(`Error in GET many tags: ${err}`);
             return res.status(500).json({ err })

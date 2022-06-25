@@ -48,7 +48,7 @@ class TagRepository {
                 tagName: {$regex: new RegExp(pattern), $options: 'i'}
             })
 
-            const lastPage = Math.floor(resultCount/limit) || 1
+            const lastPage = Math.floor(resultCount/limit) + resultCount%limit || 1
 
             return { tags, resultCount, lastPage }
         } catch(err) {
@@ -80,6 +80,20 @@ class TagRepository {
             return tags
         } catch(err) {
             console.log(`Error in TagRepository: FindTagsOfArray: ${err}`)
+            throw err
+        }
+    }
+    
+    /** */
+    async FindTagsOfArrayTagName(tagNames) {
+        try {
+            const tags = await Tag.find()
+            .where('tagName')
+            .in(tagNames)
+
+            return tags
+        } catch(err) {
+            console.log(`Error in TagRepository: FindTagsOfArrayTagName: ${err}`)
             throw err
         }
     }
