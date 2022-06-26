@@ -48,7 +48,7 @@ class TagRepository {
                 tagName: {$regex: new RegExp(pattern), $options: 'i'}
             })
 
-            const lastPage = Math.floor(resultCount/limit) + resultCount%limit || 1
+            const lastPage = Math.floor(resultCount/limit) + (resultCount%limit ? 1 : 0) || 1
 
             return { tags, resultCount, lastPage }
         } catch(err) {
