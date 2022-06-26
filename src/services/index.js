@@ -223,6 +223,15 @@ class TagService {
 
         try {
             const tags = await this.tagRepository.FindTagsByAuthor(authorID)
+
+            for(const tag of tags) {
+                const { tagName } = tag
+
+                const tagData = await this.faveRepository.FindFavorite({ tagName, user:authorID })
+
+                tag['favorite'] = tagData ? true : false
+            }
+
             return({
                 status: 200,
                 payload: { tags }
