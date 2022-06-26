@@ -173,13 +173,28 @@ class TagService {
     }
 
     /** */
-    async GetTags({ search, limit, page }) {
+    async GetTags({ search, limit, page, author }) {
+        const objID = await this.utils.validID(author)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${author}`
+        })
+
         let { search:pattern } = await this.utils.sanitize({ search })
 
         if(!pattern) pattern = ".*"
 
         try {
             const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
+            
+            for(const tag of tags) {
+                const { tagName } = tag
+
+                const tagData = await this.faveRepository.FindFavorite({ tagName, user:author })
+
+                tag['favorite'] = tagData ? true : false
+            }
+            
             return({
                 status: 200,
                 payload: { 

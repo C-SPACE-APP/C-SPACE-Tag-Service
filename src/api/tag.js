@@ -42,6 +42,8 @@ const TagAPI = (app) => {
     app.get('/', async (req, res) => {
         const { search, limit, page } = req.query
         const { id } = req.body
+        // const { _id:author } = req.session.User      // to be implemented after connecting to FE
+        const author = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
             if(id) {
@@ -49,7 +51,7 @@ const TagAPI = (app) => {
                 return res.status(status).json({ message, payload })
             }
             else {
-                const { status, message, payload } = await service.GetTags({ search, limit, page })
+                const { status, message, payload } = await service.GetTags({ search, limit, page, author })
                 return res.status(status).json({ message, payload })
             }
         } catch(err) {
