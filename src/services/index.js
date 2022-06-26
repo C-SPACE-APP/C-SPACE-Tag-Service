@@ -1,12 +1,64 @@
-const { TagRepository, DBUtils } = require('../database')
+const { FavoriteRepository, DBUtils } = require('../database')
 const mongoose = require('mongoose')
 const axios = require('axios')
 
 class TagService {
 
     constructor() {
-        this.repository = new TagRepository()
+        this.repository = new FavoriteRepository()
         this.utils = new DBUtils()
+    }
+
+    /** */
+    async UpdateFavorite(favoriteData) {
+        const {
+            tagName,
+            user
+        } = favoriteData
+
+        const objID = await this.utils.validID(user)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${id}`
+        })
+
+        try {
+            const existing = await this.repository.FindFavorite({ tagName, user })
+            if(existing) {
+                const favorite = await this.repository.DeleteFavorite({ tagName, user })
+                
+                if(!favorite) return({
+                    status: 400,
+                    message: `Unable to delete ${tagName} from favorites`
+                })
+
+                return({
+                    status: 200,
+                    message: `Successfully deleted ${tagName}`,
+                    favorite
+                })
+            }
+        } catch(err) {
+            console.log(`Error in FavoriteRepository: FindFavorite: ${err}`)
+            throw err
+        }
+
+        try {
+            const favorite = await this.repository.CreateFavorite({ tagName, user })
+
+            if(!favorite) return({
+                status: 400,
+                message: `Unable to create Favorite`
+            })
+
+            return({
+                status: 200,
+                payload: { favorite }
+            })
+        } catch(err) {
+            console.log(`Error in TagService: AddFavorite: ${err}`)
+            throw err
+        }
     }
 
     /** */

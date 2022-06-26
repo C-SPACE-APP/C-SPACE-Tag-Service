@@ -1,3 +1,4 @@
 module.exports = {
-    Tag: require('./tag')
+    Tag: require('./tag'),
+    Favorite: require('./favorite')
 }

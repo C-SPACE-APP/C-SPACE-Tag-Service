@@ -6,6 +6,21 @@ const TagAPI = (app) => {
 
     const service = new TagService()
 
+    // app.post('/favorite', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
+    app.post('/favorite', async (req, res) => {
+        // const { _id:user } = req.session.User      // to be implemented after connecting to FE
+        const user = '6294a121c6308c7bb323dd00'   // hard coded user id
+        const { tagName } = req.body
+
+        try {
+            const { status, message, payload } = await service.UpdateFavorite({ tagName, user })
+            return res.status(status).json({ message, payload })
+        } catch(err) {
+            console.log(`Error in POST favorite: ${err}`)
+            return res.status(500).json({ err })
+        }
+    })
+    
     /** */
     // app.post('/', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
     app.post('/', async (req, res) => {
