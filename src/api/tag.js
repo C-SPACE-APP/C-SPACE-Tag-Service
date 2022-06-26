@@ -91,9 +91,11 @@ const TagAPI = (app) => {
     /** */
     app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
+        // const { _id:user } = req.session.User      // to be implemented after connecting to FE
+        const user = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
-            const { status, message, payload } = await service.GetTag(id)
+            const { status, message, payload } = await service.GetTag(id, user)
             return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET one tag: ${err}`);

@@ -1,5 +1,4 @@
 const { FavoriteRepository, TagRepository, DBUtils } = require('../database')
-const mongoose = require('mongoose')
 const axios = require('axios')
 
 class TagService {
@@ -135,7 +134,7 @@ class TagService {
     }
 
     /** */
-    async GetTag(id) {
+    async GetTag(id, user) {
         const objID = await this.utils.validID(id)
         if(!objID) return({
             status: 400,
@@ -150,18 +149,23 @@ class TagService {
                 message: `Tag ${id} not found`
             })
 
-            const { data } = await axios({
-                method: 'post',
-                url: 'http://localhost:3002/app-events/',
-                data: {
-                    event: 'GET_USER',
+            try {
+                const { data } = await axios({
+                    method: 'post',
+                    url: 'http://localhost:3002/app-events/',
                     data: {
-                        userId: tag.author
+                        event: 'GET_USER',
+                        data: {
+                            userId: tag.author
+                        }
                     }
-                }
-            })
+                })
+                if(data.payload.user) tag.author = data.payload.user
+            } catch(err) {}
 
-            if(data.payload.user) tag.author = data.payload.user
+            const favorite = await this.faveRepository.FindFavorite({ tagName: tag.tagName, user })
+            
+            tag['favorite'] = (favorite ? true : false) 
 
             return({
                 status: 200,
