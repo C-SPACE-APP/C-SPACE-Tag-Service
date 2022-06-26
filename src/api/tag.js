@@ -72,6 +72,21 @@ const TagAPI = (app) => {
     })
 
     /** */
+    // app.get('/favorite/:id', Authorize(), async (req, res) => {
+    app.get('/favorite/:id', async (req, res) => {
+        const { limit, page } = req.query
+        const { id } = req.params
+
+        try {
+            const { status, message, payload } = await service.GetFavorites({ user:id, limit, page })
+            return res.status(status).json({ message, payload })
+        } catch(err) {
+            console.log(`Error in GET favorite tags: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
+    /** */
     app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
 

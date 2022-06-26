@@ -34,6 +34,29 @@ class FavoriteRepository {
             throw err
         }
     }
+
+    /** */
+    async FindFavorites({ user, count, page }) {
+        const limit = count || 10
+        const skip = page ? (page-1)*limit : 0
+
+        try {
+            const favorites = await Favorite.find({ user })
+            .sort({ tagName: 1 })
+            .skip(skip)
+            .limit(limit)
+            .lean()
+
+            const resultCount = await Favorite.countDocuments({ user })
+
+            const lastPage = Math.floor(resultCount/limit) + (resultCount%limit ? 1 : 0) || 1
+
+            return { tags:favorites, resultCount, lastPage }
+        } catch(err) {
+            console.log(`Error in FavoriteRepository: FindFavorites: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = FavoriteRepository

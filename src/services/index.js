@@ -1,12 +1,37 @@
-const { FavoriteRepository, DBUtils } = require('../database')
+const { FavoriteRepository, TagRepository, DBUtils } = require('../database')
 const mongoose = require('mongoose')
 const axios = require('axios')
 
 class TagService {
 
     constructor() {
-        this.repository = new FavoriteRepository()
+        this.tagRepository = new TagRepository()
+        this.faveRepository = new FavoriteRepository()
         this.utils = new DBUtils()
+    }
+    
+    /** */
+    async GetFavorites({ user, limit, page} ) {
+        const objID = await this.utils.validID(user)
+        if(!objID) return({
+            status: 400,
+            message: `Invalid ID: ${user}`
+        })
+
+        try {
+            const { tags, resultCount, lastPage } = await  this.faveRepository.FindFavorites({ user, count:parseInt(limit), page:parseInt(page) })
+            return({
+                status: 200,
+                payload: { 
+                    tags,
+                    resultCount,
+                    lastPage
+                }
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetFavorites: ${err}`)
+            throw err
+        }
     }
 
     /** */
@@ -19,13 +44,13 @@ class TagService {
         const objID = await this.utils.validID(user)
         if(!objID) return({
             status: 400,
-            message: `Invalid ID: ${id}`
+            message: `Invalid ID: ${user}`
         })
 
         try {
-            const existing = await this.repository.FindFavorite({ tagName, user })
+            const existing = await this.faveRepository.FindFavorite({ tagName, user })
             if(existing) {
-                const favorite = await this.repository.DeleteFavorite({ tagName, user })
+                const favorite = await this.faveRepository.DeleteFavorite({ tagName, user })
                 
                 if(!favorite) return({
                     status: 400,
@@ -44,7 +69,7 @@ class TagService {
         }
 
         try {
-            const favorite = await this.repository.CreateFavorite({ tagName, user })
+            const favorite = await this.faveRepository.CreateFavorite({ tagName, user })
 
             if(!favorite) return({
                 status: 400,
@@ -76,7 +101,7 @@ class TagService {
         })
 
         try {
-            const existing = await this.repository.FindTag({ tagName })
+            const existing = await this.tagRepository.FindTag({ tagName })
             if(existing) return({
                 status: 200,
                 message: `Tag ${tagName} already exist`,
@@ -88,7 +113,7 @@ class TagService {
         }
 
         try {
-            const tag = await this.repository.CreateTag({
+            const tag = await this.tagRepository.CreateTag({
                 tagName,
                 description,
                 author
@@ -118,7 +143,7 @@ class TagService {
         })
 
         try {
-            let tag = await this.repository.FindTag({ id })
+            let tag = await this.tagRepository.FindTag({ id })
 
             if(!tag) return({
                 status: 400,
@@ -154,7 +179,7 @@ class TagService {
         if(!pattern) pattern = ".*"
 
         try {
-            const { tags, resultCount, lastPage } = await this.repository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
+            const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
             return({
                 status: 200,
                 payload: { 
@@ -178,7 +203,7 @@ class TagService {
         })
 
         try {
-            const tags = await this.repository.FindTagsByAuthor(authorID)
+            const tags = await this.tagRepository.FindTagsByAuthor(authorID)
             return({
                 status: 200,
                 payload: { tags }
@@ -200,7 +225,7 @@ class TagService {
         }
         
         try {
-            const tags = await this.repository.FindTagsOfArray(ids)
+            const tags = await this.tagRepository.FindTagsOfArray(ids)
             return({
                 status: 200,
                 payload: { tags }
@@ -219,7 +244,7 @@ class TagService {
         })
 
         try {
-            const tags = await this.repository.FindTagsOfArrayTagName(tagNames)
+            const tags = await this.tagRepository.FindTagsOfArrayTagName(tagNames)
             const resultLen = tags.length
             const inputLen = tagNames.length
             const message = (resultLen === inputLen ? null : `${resultLen} out of ${inputLen} tags found`)
