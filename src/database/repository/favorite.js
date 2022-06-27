@@ -57,6 +57,37 @@ class FavoriteRepository {
             throw err
         }
     }
+
+     /** */
+     async FindPopular({ count, page } = {}) {
+        const limit = count || 5
+        const skip = page ? (page-1)*limit : 0
+
+        try {
+            const tags = await Favorite.aggregate([
+                {
+                    $group: {
+                        _id: "$tagName", 
+                        count: {
+                            $sum: 1
+                        }
+                    }
+                },
+                {
+                    $sort: { count: -1, _id: 1 }
+                }
+            ])
+
+            const resultCount = tags.length
+            const lastPage = Math.floor(resultCount/limit) + (resultCount%limit ? 1 : 0) || 1
+            const sliced = tags.slice(skip, skip+limit)
+
+            return { tags:sliced, resultCount, lastPage }
+        } catch(err) {
+            console.log(`Error in FavoriteRepository: FindPopular: ${err}`)
+            throw err
+        }
+    }
 }
 
 module.exports = FavoriteRepository

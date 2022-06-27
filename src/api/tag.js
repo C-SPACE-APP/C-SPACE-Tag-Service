@@ -9,7 +9,7 @@ const TagAPI = (app) => {
     // app.post('/favorite', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
     app.post('/favorite', async (req, res) => {
         // const { _id:user } = req.session.User      // to be implemented after connecting to FE
-        const user = '6294a121c6308c7bb323dd00'   // hard coded user id
+        const user = '6294a118c6308c7bb323dcff'   // hard coded user id
         const { tagName } = req.body
 
         try {
@@ -84,6 +84,18 @@ const TagAPI = (app) => {
             return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET favorite tags: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
+    /** */
+    app.get('/popular', async (req, res) => {
+        const { limit, page } = req.query
+        try {
+            const { status, message, payload } = await service.GetPopular({ limit, page })
+            return res.status(status).json({ message, payload })
+        } catch(err) {
+            console.log(`Error in GET popular tags: ${err}`);
             return res.status(500).json({ err })
         }
     })

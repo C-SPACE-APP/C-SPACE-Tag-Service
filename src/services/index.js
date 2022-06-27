@@ -86,6 +86,27 @@ class TagService {
     }
 
     /** */
+    async GetPopular({ limit, page } = {}) {
+        try {
+            const { tags, resultCount, lastPage } =  await this.faveRepository.FindPopular({ count:parseInt(limit), page:parseInt(page) })
+            
+            return({
+                status: 200,
+                payload: { 
+                    tags,
+                    resultCount,
+                    lastPage
+                }
+            })
+        } catch(err) {
+            console.log(`Error in TagService: GetPopular: ${err}`)
+            throw err
+        }
+        
+        console.log(tags)
+    }
+
+    /** */
     async AddTag(tagData) {
         const {
             tagName,
