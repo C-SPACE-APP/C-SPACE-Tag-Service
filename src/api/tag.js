@@ -6,10 +6,10 @@ const TagAPI = (app) => {
 
     const service = new TagService()
 
-    // app.post('/favorite', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
-    app.post('/favorite', async (req, res) => {
-        // const { _id:user } = req.session.User      // to be implemented after connecting to FE
-        const user = '6294a118c6308c7bb323dcff'   // hard coded user id
+    app.post('/favorite', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
+    // app.post('/favorite', async (req, res) => {
+        const { _id:user } = req.session.User      // to be implemented after connecting to FE
+        // const user = '6294a118c6308c7bb323dcff'   // hard coded user id
         const { tagName } = req.body
 
         try {
@@ -22,10 +22,10 @@ const TagAPI = (app) => {
     })
     
     /** */
-    // app.post('/', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
-    app.post('/', async (req, res) => {
-        // const { _id:author } = req.session.User      // to be implemented after connecting to FE
-        const author = '6294a121c6308c7bb323dd00'   // hard coded user id
+    app.post('/', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
+    // app.post('/', async (req, res) => {
+        const { _id:author } = req.session.User      // to be implemented after connecting to FE
+        // const author = '6294a121c6308c7bb323dd00'   // hard coded user id
         const { tagName, description } = req.body
 
         try {
@@ -38,12 +38,12 @@ const TagAPI = (app) => {
     })
 
     /** */
-    // app.get('/', Authorize(), async (req, res) => {
-    app.get('/', async (req, res) => {
+    app.get('/', Authorize(), async (req, res) => {
+    // app.get('/', async (req, res) => {
         const { search, limit, page } = req.query
         const { id } = req.body
-        // const { _id:author } = req.session.User      // to be implemented after connecting to FE
-        const author = '6294a121c6308c7bb323dd00'   // hard coded user id
+        const { _id:author } = req.session.User      // to be implemented after connecting to FE
+        // const author = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
             if(id) {
@@ -74,8 +74,8 @@ const TagAPI = (app) => {
     })
 
     /** */
-    // app.get('/favorite/:id', Authorize(), async (req, res) => {
-    app.get('/favorite/:id', async (req, res) => {
+    app.get('/favorite/:id', Authorize(), async (req, res) => {
+    // app.get('/favorite/:id', async (req, res) => {
         const { limit, page } = req.query
         const { id } = req.params
 
@@ -103,8 +103,8 @@ const TagAPI = (app) => {
     /** */
     app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
-        // const { _id:user } = req.session.User      // to be implemented after connecting to FE
-        const user = '6294a121c6308c7bb323dd00'   // hard coded user id
+        const { _id:user } = req.session.User      // to be implemented after connecting to FE
+        // const user = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
             const { status, message, payload } = await service.GetTag(id, user)
