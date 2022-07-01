@@ -101,6 +101,17 @@ const TagAPI = (app) => {
     })
 
     /** */
+    app.get('/verify', async (req, res) => {
+        const { tags } = req.body
+        try {
+            const { status, message, payload } = await service.GetTagsOfArrayTagName(tags)
+        } catch(err) {
+            console.log(`Error in GET verify tag: ${err}`);
+            return res.status(500).json({ err })
+        }
+    })
+
+    /** */
     app.get('/:id', Authorize(), async (req, res) => {
         const { id } = req.params
         const { _id:user } = req.session.User      // to be implemented after connecting to FE

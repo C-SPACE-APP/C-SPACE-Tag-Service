@@ -297,11 +297,12 @@ class TagService {
             const resultLen = tags.length
             const inputLen = tagNames.length
             const message = (resultLen === inputLen ? null : `${resultLen} out of ${inputLen} tags found`)
+            const valid = (resultLen === inputLen ? true : false)
 
             return({
                 status: 200,
                 message,
-                payload: { tags }
+                payload: { tags, valid }
             })
         } catch(err) {
             console.log(`Error in TagService: GetTagsOfArrayTagName: ${err}`)
