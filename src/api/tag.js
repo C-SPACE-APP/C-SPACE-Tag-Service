@@ -105,6 +105,7 @@ const TagAPI = (app) => {
         const { tags } = req.body
         try {
             const { status, message, payload } = await service.GetTagsOfArrayTagName(tags)
+            return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET verify tag: ${err}`);
             return res.status(500).json({ err })
