@@ -159,15 +159,13 @@ class TagService {
     }
 
     /** */
-    async GetTag(id, user) {
+    async GetTag({ id, user, tagName }) {
         const objID = await this.utils.validID(id)
-        if(!objID) return({
-            status: 400,
-            message: `Invalid ID: ${id}`
-        })
 
         try {
-            let tag = await this.tagRepository.FindTag({ id })
+            let tag
+            if(objID) tag = await this.tagRepository.FindTag({ id })
+            else tag = await this.tagRepository.FindTag({ tagName })
 
             if(!tag) return({
                 status: 400,

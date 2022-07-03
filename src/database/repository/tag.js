@@ -19,8 +19,8 @@ class TagRepository {
         try {
             const tag = await Tag.findOne({
                 $or: [
-                    { _id: id },
-                    { tagName }
+                    { tagName },
+                    { _id: id }
                 ]
             }).lean()
             return tag

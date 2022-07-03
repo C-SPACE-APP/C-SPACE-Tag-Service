@@ -119,7 +119,7 @@ const TagAPI = (app) => {
         // const user = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
-            const { status, message, payload } = await service.GetTag(id, user)
+            const { status, message, payload } = await service.GetTag({ id, user, tagName:id })
             return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET one tag: ${err}`);
