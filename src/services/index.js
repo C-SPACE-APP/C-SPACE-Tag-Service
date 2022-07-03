@@ -202,7 +202,7 @@ class TagService {
     }
 
     /** */
-    async GetTags({ search, limit, page, author }) {
+    async GetTags({ search, limit, page, author, omit }) {
         const objID = await this.utils.validID(author)
         if(!objID) return({
             status: 400,
@@ -214,7 +214,7 @@ class TagService {
         if(!pattern) pattern = ".*"
 
         try {
-            const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
+            const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page), omit })
             
             for(const tag of tags) {
                 const { tagName } = tag
