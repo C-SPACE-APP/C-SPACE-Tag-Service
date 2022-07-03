@@ -1,5 +1,11 @@
 const axios = require('axios')
 
+require('dotenv').config()
+
+const {
+    AUTH_SERVICE
+} = process.env
+
 module.exports = () => {
     return (async (req, res, next) => {
         let { cookie } = req.headers
@@ -14,7 +20,7 @@ module.exports = () => {
                 headers: {
                     cookie: cookie
                 },
-                url: 'http://localhost:3003/getUser/'
+                url: `http://${AUTH_SERVICE}/getUser/`
             })
 
             req.session = data
