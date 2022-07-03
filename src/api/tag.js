@@ -6,6 +6,12 @@ const TagAPI = (app) => {
 
     const service = new TagService()
 
+    /** */
+    app.get('/test', async (req, res) => {
+        return res.json({ message: 'Inside Tag Service' })
+    })
+
+    /** */
     app.post('/favorite', Authorize(), async (req, res) => {     // to be implemented after connecting to FE
     // app.post('/favorite', async (req, res) => {
         const { _id:user } = req.session.User      // to be implemented after connecting to FE
@@ -101,7 +107,7 @@ const TagAPI = (app) => {
     })
 
     /** */
-    app.get('/verify', async (req, res) => {
+    app.post('/verify', async (req, res) => {
         const { tags } = req.body
         try {
             const { status, message, payload } = await service.GetTagsOfArrayTagName(tags)
