@@ -124,6 +124,13 @@ class TagService {
             message: `Invalid ID: ${id}`
         })
 
+        const { description:desc } = await this.utils.sanitize({ description })
+
+        if(!desc) return({
+            status: 400,
+            message: `No description`
+        })
+
         try {
             const existing = await this.tagRepository.FindTag({ tagName })
             if(existing) return({
