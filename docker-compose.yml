@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    container_name: tag-service
+    build: .
+    ports:
+      - '3004:3004'
+    depends_on:
+      - tag-db
+    networks:
+      - cspace-backend
+      - tag-network
+        
+  tag-db:
+    container_name: tag-db
+    image: mongo
+    ports:
+      - '28004:27017'
+    networks:
+      - tag-network
+
+networks:
+   cspace-backend:
+      external: true
+   tag-network:
+      external: true
