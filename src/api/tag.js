@@ -38,10 +38,10 @@ const TagAPI = (app) => {
     })
 
     /** */
-    app.get('/', Authorize(), async (req, res) => {
-    // app.get('/', async (req, res) => {
-        const { search, limit, page } = req.query
-        const { id, omit } = req.body
+    // app.get('/', Authorize(), async (req, res) => {
+    app.get('/', async (req, res) => {
+        const { search, limit, page, omit } = req.query
+        const { id } = req.body
         const { _id:author } = req.session.User      // to be implemented after connecting to FE
         // const author = '6294a121c6308c7bb323dd00'   // hard coded user id
 
