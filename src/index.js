@@ -1,12 +1,13 @@
 const express = require('express')
 const { databaseConnection } = require('./database')
+const mongoose = require('mongoose')
 const server = require('./server')
 
 const start = async () => {
     const app = express()
 
     try {
-        await databaseConnection()
+        await databaseConnection(mongoose)
     } catch(err) {
         return
     }
