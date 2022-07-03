@@ -38,14 +38,14 @@ class TagRepository {
         try {
             const tags = await Tag.find({
                 // tagName: {$regex: new RegExp(pattern), $options: 'i'}
-                tagName: {$and: [
-                    { $regex: new RegExp(pattern), $options: 'i' },
-                    { $nin: omit }
-                ]}
-                // $and: [
-                //     { tagName: {$regex: new RegExp(pattern), $options: 'i'} }, 
-                //     { tagName: }
-                // ]
+                // tagName: {$and: [
+                //     { $regex: new RegExp(pattern), $options: 'i' },
+                //     { $nin: omit }
+                // ]}
+                $and: [
+                    { tagName: {$regex: new RegExp(pattern), $options: 'i'} }, 
+                    { tagName: { $nin: omit } }
+                ]
             })
             .sort({ tagName: 1 })
             .skip(skip)
