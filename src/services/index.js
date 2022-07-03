@@ -1,6 +1,12 @@
 const { FavoriteRepository, TagRepository, DBUtils } = require('../database')
 const axios = require('axios')
 
+require('dotenv').config()
+
+const {
+    USER_SERVICE
+} = process.env
+
 class TagService {
 
     constructor() {
@@ -102,8 +108,6 @@ class TagService {
             console.log(`Error in TagService: GetPopular: ${err}`)
             throw err
         }
-        
-        console.log(tags)
     }
 
     /** */
@@ -173,7 +177,7 @@ class TagService {
             try {
                 const { data } = await axios({
                     method: 'post',
-                    url: 'http://localhost:3002/app-events/',
+                    url: `http://${USER_SERVICE}/app-events/`,
                     data: {
                         event: 'GET_USER',
                         data: {
