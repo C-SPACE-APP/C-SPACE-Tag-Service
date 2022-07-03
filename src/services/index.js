@@ -124,13 +124,6 @@ class TagService {
             message: `Invalid ID: ${id}`
         })
 
-        const { description:desc } = await this.utils.sanitize({ description })
-
-        if(!desc) return({
-            status: 400,
-            message: `No description`
-        })
-
         try {
             const existing = await this.tagRepository.FindTag({ tagName })
             if(existing) return({
@@ -142,6 +135,13 @@ class TagService {
             console.log(`Error in TagRepository: AddTag: ${err}`)
             throw err
         }
+
+        const { description:desc } = await this.utils.sanitize({ description })
+
+        if(!desc) return({
+            status: 400,
+            message: `No description`
+        })
 
         try {
             const tag = await this.tagRepository.CreateTag({
