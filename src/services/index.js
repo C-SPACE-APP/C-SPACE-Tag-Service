@@ -124,6 +124,13 @@ class TagService {
             message: `Invalid ID: ${id}`
         })
 
+        const { description:desc, tagName:tag } = await this.utils.sanitize({ description, tagName })
+        
+        if(!tagName) return({
+            status:400,
+            message: `No Tag name`
+        })
+
         try {
             const existing = await this.tagRepository.FindTag({ tagName })
             if(existing) return({
@@ -135,6 +142,12 @@ class TagService {
             console.log(`Error in TagRepository: AddTag: ${err}`)
             throw err
         }
+
+
+        if(!desc) return({
+            status: 400,
+            message: `No description`
+        })
 
         try {
             const tag = await this.tagRepository.CreateTag({
@@ -159,15 +172,13 @@ class TagService {
     }
 
     /** */
-    async GetTag(id, user) {
+    async GetTag({ id, user, tagName }) {
         const objID = await this.utils.validID(id)
-        if(!objID) return({
-            status: 400,
-            message: `Invalid ID: ${id}`
-        })
 
         try {
-            let tag = await this.tagRepository.FindTag({ id })
+            let tag
+            if(objID) tag = await this.tagRepository.FindTag({ id })
+            else tag = await this.tagRepository.FindTag({ tagName })
 
             if(!tag) return({
                 status: 400,
@@ -202,7 +213,7 @@ class TagService {
     }
 
     /** */
-    async GetTags({ search, limit, page, author }) {
+    async GetTags({ search, limit, page, author, omit }) {
         const objID = await this.utils.validID(author)
         if(!objID) return({
             status: 400,
@@ -214,7 +225,7 @@ class TagService {
         if(!pattern) pattern = ".*"
 
         try {
-            const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page) })
+            const { tags, resultCount, lastPage } = await this.tagRepository.FindTags({ pattern, count:parseInt(limit), page:parseInt(page), omit })
             
             for(const tag of tags) {
                 const { tagName } = tag

@@ -19,8 +19,8 @@ class TagRepository {
         try {
             const tag = await Tag.findOne({
                 $or: [
-                    { _id: id },
-                    { tagName }
+                    { tagName },
+                    { _id: id }
                 ]
             }).lean()
             return tag
@@ -31,13 +31,21 @@ class TagRepository {
     }
 
     /** */
-    async FindTags({ pattern, count, page }) {
+    async FindTags({ pattern, count, page, omit }) {
         const limit = count || 10
         const skip = page ? (page-1)*limit : 0
 
         try {
             const tags = await Tag.find({
-                tagName: {$regex: new RegExp(pattern), $options: 'i'}
+                // tagName: {$regex: new RegExp(pattern), $options: 'i'}
+                // tagName: {$and: [
+                //     { $regex: new RegExp(pattern), $options: 'i' },
+                //     { $nin: omit }
+                // ]}
+                $and: [
+                    { tagName: {$regex: new RegExp(pattern), $options: 'i'} }, 
+                    { tagName: { $nin: omit } }
+                ]
             })
             .sort({ tagName: 1 })
             .skip(skip)

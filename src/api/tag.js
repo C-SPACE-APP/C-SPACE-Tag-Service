@@ -44,9 +44,9 @@ const TagAPI = (app) => {
     })
 
     /** */
-    app.get('/', Authorize(), async (req, res) => {
-    // app.get('/', async (req, res) => {
-        const { search, limit, page } = req.query
+    // app.get('/', Authorize(), async (req, res) => {
+    app.get('/', async (req, res) => {
+        const { search, limit, page, omit } = req.query
         const { id } = req.body
         const { _id:author } = req.session.User      // to be implemented after connecting to FE
         // const author = '6294a121c6308c7bb323dd00'   // hard coded user id
@@ -57,7 +57,7 @@ const TagAPI = (app) => {
                 return res.status(status).json({ message, payload })
             }
             else {
-                const { status, message, payload } = await service.GetTags({ search, limit, page, author })
+                const { status, message, payload } = await service.GetTags({ search, limit, page, author, omit })
                 return res.status(status).json({ message, payload })
             }
         } catch(err) {
@@ -125,7 +125,7 @@ const TagAPI = (app) => {
         // const user = '6294a121c6308c7bb323dd00'   // hard coded user id
 
         try {
-            const { status, message, payload } = await service.GetTag(id, user)
+            const { status, message, payload } = await service.GetTag({ id, user, tagName:id })
             return res.status(status).json({ message, payload })
         } catch(err) {
             console.log(`Error in GET one tag: ${err}`);
