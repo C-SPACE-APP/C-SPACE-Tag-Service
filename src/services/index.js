@@ -131,10 +131,8 @@ class TagService {
             message: `No Tag name`
         })
 
-        tag = tag.toUpperCase()
-
         try {
-            const existing = await this.tagRepository.FindTag({ tagName:tag })
+            const existing = await this.tagRepository.FindTag({ tagName:tagName.toUpperCase() })
             if(existing) return({
                 status: 200,
                 message: `Tag ${tagName} already exist`,
@@ -153,7 +151,7 @@ class TagService {
 
         try {
             const tag = await this.tagRepository.CreateTag({
-                tagName:tag,
+                tagName:tagName.toUpperCase(),
                 description,
                 author
             })
