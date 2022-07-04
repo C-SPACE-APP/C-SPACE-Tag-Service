@@ -124,15 +124,17 @@ class TagService {
             message: `Invalid ID: ${id}`
         })
 
-        const { description:desc, tagName:tag } = await this.utils.sanitize({ description, tagName })
+        let { description:desc, tagName:tag } = await this.utils.sanitize({ description, tagName })
         
-        if(!tagName) return({
+        if(!tag) return({
             status:400,
             message: `No Tag name`
         })
 
+        tag = tag.toUpperCase()
+
         try {
-            const existing = await this.tagRepository.FindTag({ tagName })
+            const existing = await this.tagRepository.FindTag({ tagName:tag })
             if(existing) return({
                 status: 200,
                 message: `Tag ${tagName} already exist`,
@@ -151,7 +153,7 @@ class TagService {
 
         try {
             const tag = await this.tagRepository.CreateTag({
-                tagName,
+                tagName:tag,
                 description,
                 author
             })
